@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'victoria/css/style.css' %}">
+    <title>Victoria</title>
+</head>
+<body>
+    <header>
+        {% include 'includes/Nav.html' %}
+    </header>
+    <main >
+        {% block main %}
+            
+        {% endblock main %}
+    </main>
+    <aside>
+        
+        {% block reklama %}
+            
+        {% endblock reklama %}
+            
+    </aside>
+    <footer>
+        {% include 'includes/Nav.html' %}
+        &copy victoria
+    </footer>
+</body>
+</html>

@@ -7,46 +7,52 @@ products_list = [
         "title": "Телефон",
         "description": "Смартфон с хорошей камерой",
         "price": 35000,
+        "is_stock" : True,
     },
     {
         "id": 2,
         "title": "Планшет",
         "description": "Планшет для работы и учёбы",
         "price": 20000,
+        "is_stock" : True
     },
     {
         "id": 3,
         "title": "Ноутбук",
         "description": "Мощный ноутбук для программирования",
         "price": 70000,
+        "is_stock" : False
     },
     {
         "id": 4,
         "title": "Монитор",
         "description": "Монитор с диагональю 27 дюймов",
         "price": 15000,
+        "is_stock" : True
     },
     {
         "id": 5,
         "title": "Мышка",
         "description": "Беспроводная компьютерная мышка",
         "price": 1500,
-    },
+        "is_stock" : False
+    }
 ]
 
 # Create your views here.
 def home(request):
-    return HttpResponse("Hello it is home page!")
+    return render(request, "victoria/home.html")
 
 def contacts(request):
     return HttpResponse("Contacts page!")
 
 
 def products(request):
-    text = f"<h1 style='color: red;'>Ваш товар номер: <br></h1>" 
-    for prod in products_list:
-        text += f"{prod["id"]} - {prod["title"]} <br>"
-    return HttpResponse(text)
+    context = {
+        "products": products_list,
+        "name" : "Daniil"
+        }
+    return render(request, "victoria/products.html", context)
 
 
 def products_detail(request, id):

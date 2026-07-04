@@ -1,0 +1,26 @@
+{% extends 'base/base.html' %}
+
+{% block main %}
+    <ul class="products_list">
+        {% for prod in products %}
+        <li class="products_item">
+            <h1>{{prod.title}}</h1>
+            <p>{{prod.description}}</p>
+                {% if prod.is_stock %}
+                    <span>{{prod.price}} Kc</span>
+                {%else%}
+                    <span>Нет в наличии!</span>
+                {% endif %}
+            <a href="{% url 'products_detail' id=prod.id%}"> Подробная информация...</a>
+            </li>
+        {% empty %}
+            <h2>список продуктов пуст!</h2>
+        {% endfor %}
+    </ul>
+{% endblock main %}
+
+
+{% block reklama %}
+    <h2>Супере пупер реклама за миллион крон!!!</h2>
+{% endblock reklama %}
+    
