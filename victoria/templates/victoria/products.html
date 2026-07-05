@@ -6,7 +6,8 @@
         <li class="products_item">
             <h1>{{prod.title}}</h1>
             <p>{{prod.description}}</p>
-                {% if prod.is_stock %}
+                {% if prod.image %}
+                    <img style="width: 200px; height: 200px;" src="{{prod.image.url}}" alt="">
                     <span>{{prod.price}} Kc</span>
                 {%else%}
                     <span>Нет в наличии!</span>

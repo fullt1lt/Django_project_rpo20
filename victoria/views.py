@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from .models import Product
 
 products_list = [
     {
@@ -48,10 +49,9 @@ def contacts(request):
 
 
 def products(request):
-    context = {
-        "products": products_list,
-        "name" : "Daniil"
-        }
+
+    products = Product.objects.filter(price__lte=50000)
+    context = {"products": products, "name": "Daniil"}
     return render(request, "victoria/products.html", context)
 
 
