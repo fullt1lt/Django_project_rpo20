@@ -9,6 +9,9 @@ class Category(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        verbose_name_plural = "Категории"
+
 class Reviews(models.Model):
     text = models.TextField()
     authors = models.CharField(max_length=20)
@@ -19,6 +22,9 @@ class Reviews(models.Model):
 
     def __str__(self):
         return f"{self.text[:10]} - {self.rating}"
+
+    class Meta:
+        verbose_name_plural = "Отзывы"
 
 
 class Product(models.Model):

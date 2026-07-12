@@ -1,0 +1,17 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block main %}
+    <form action="/contacts/" method="post">
+        {% csrf_token %}
+        {{form.email}}
+        {{form.password}}
+        {{form.password.errors}}
+        <button type="submit">Login</button>
+    </form>
+    
+    {% if email and password %}
+        <p>{{email}} {{password}}</p>
+    {% endif %}
+        
+{% endblock main %}

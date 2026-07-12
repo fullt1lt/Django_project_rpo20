@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Product
+from .forms import MyForm, CreateProductForm
 
 products_list = [
     {
@@ -45,7 +46,18 @@ def home(request):
     return render(request, "victoria/home.html")
 
 def contacts(request):
-    return HttpResponse("Contacts page!")
+    my_form = MyForm()
+    if request.method == "POST":
+        my_form = MyForm(request.POST)
+        if my_form.is_valid():
+            email = my_form.cleaned_data["email"]
+            password = my_form.cleaned_data["password"]
+            return render(
+                request,
+                "victoria/contacts.html",
+                {"email": email, "password": password, "form": my_form}
+            )
+    return render(request, "victoria/contacts.html", {"form": my_form})
 
 
 def products(request):
@@ -62,3 +74,13 @@ def products_detail(request, id):
                 f"Ваш товар номер: {prod["id"]} - {prod["title"]} - {prod["description"]} - {prod["price"]}Kc"
             )
     return HttpResponse(f"Товар не найден!")
+
+
+def create_product(request):
+    form = CreateProductForm()
+    if request.method == "POST":
+        form = CreateProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            form = CreateProductForm()
+    return render(request, "victoria/create_product.html", {"form": form})
