@@ -2,11 +2,7 @@
 {% load static %}
 
 {% block main %}
-    <h2 id="root">Home Page!</h2>
-    <img src="{% static 'victoria/images/1.jpg' %}" alt="">
-    <script src="{% static 'victoria/js/click.js' %}"></script>
+    
+    <h2 id="root">{{products}}</h2>
+    <h2 id="root">{{title}}</h2>
 {% endblock main %}
-
-{% block reklama %}
-    <h2>Супере пупер реклама за 2 миллиона крон!!!</h2>
-{% endblock reklama %}

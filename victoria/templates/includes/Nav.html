@@ -3,5 +3,16 @@
     <li><a href="{% url 'home_page'%}">Home</a></li>
     <li><a href="{% url 'contacts_page'%}">Contacts</a></li>
     <li><a href="{% url 'products'%}">Products</a></li>
+    
+    {% if user.is_authenticated %}
+      {{user.username}}
+      <form action="/logout/" method="post">
+        {% csrf_token %}
+        <button type="submit">LOGOUT</button>
+      </form> 
+    {% else %}
+      <li><a href="{% url 'login'%}">Login</a></li>
+      <li><a href="{% url 'register'%}">Register</a></li>
+    {% endif %}
   </ul>
 </nav>

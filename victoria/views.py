@@ -1,7 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.contrib.auth import login, logout
+from django.contrib.auth.forms import UserCreationForm
 from .models import Product
-from .forms import MyForm, CreateProductForm
+from .forms import MyForm, CreateProductForm, LoginForm
+
+from django.views import View
+from django.views.generic import TemplateView
+from django.contrib.auth.decorators import login_required, user_passes_test
 
 products_list = [
     {
@@ -41,9 +47,16 @@ products_list = [
     }
 ]
 
-# Create your views here.
-def home(request):
-    return render(request, "victoria/home.html")
+
+class HomePage(TemplateView):
+    template_name = "victoria/home.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["products"] = Product.objects.all()
+        context["title"] = "Супер пупер продукты"
+        return context
+
 
 def contacts(request):
     my_form = MyForm()
@@ -60,9 +73,15 @@ def contacts(request):
     return render(request, "victoria/contacts.html", {"form": my_form})
 
 
+def is_staff(user):
+    return user.is_superuser
+
+
+@login_required
+@user_passes_test(is_staff)
 def products(request):
 
-    products = Product.objects.filter(price__lte=50000)
+    products = Product.objects.all()
     context = {"products": products, "name": "Daniil"}
     return render(request, "victoria/products.html", context)
 
@@ -76,11 +95,45 @@ def products_detail(request, id):
     return HttpResponse(f"Товар не найден!")
 
 
-def create_product(request):
-    form = CreateProductForm()
-    if request.method == "POST":
+class CreateProduct(View):
+    http_method_names = ["get", "post"]
+
+    def get(self, request, *args, **kwargs):
+        form = CreateProductForm()
+        return render(request, "victoria/create_product.html", {"form": form})
+
+    def post(self, request, *args, **kwargs):
         form = CreateProductForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             form = CreateProductForm()
-    return render(request, "victoria/create_product.html", {"form": form})
+        return render(request, "victoria/create_product.html", {"form": form})
+
+
+def register(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("home_page")
+        return render(request, "victoria/register.html", {"form": form})
+    else:
+        form = UserCreationForm()
+        return render(request, "victoria/register.html", {"form" : form})
+
+
+def my_login(request):
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            login(request, form.user)
+            return redirect("home_page")
+        return render(request, "victoria/login.html", {"form": form})
+    else:
+        form = LoginForm
+        return render(request, "victoria/login.html", {"form": form})
+
+
+def logout_view(request):
+    logout(request)
+    return redirect("home_page")
